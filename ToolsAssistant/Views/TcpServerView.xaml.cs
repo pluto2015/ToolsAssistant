@@ -19,7 +19,7 @@ namespace ToolsAssistant.Views
     /// <summary>
     /// TcpServerView.xaml 的交互逻辑
     /// </summary>
-    public partial class TcpServerView : PageWithId
+    public partial class TcpServerView : Page
     {
         public TcpServerView()
         {

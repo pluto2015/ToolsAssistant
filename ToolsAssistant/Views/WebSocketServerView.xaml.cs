@@ -19,7 +19,7 @@ namespace ToolsAssistant.Views
     /// <summary>
     /// WebSocketServerViewModel.xaml 的交互逻辑
     /// </summary>
-    public partial class WebSocketServerView : PageWithId
+    public partial class WebSocketServerView : Page
     {
         public WebSocketServerView()
         {

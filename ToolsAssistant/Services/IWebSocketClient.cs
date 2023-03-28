@@ -9,6 +9,7 @@ namespace ToolsAssistant.Services
 {
     public interface IWebSocketClient
     {
+        bool IsConnected { get; }
         /// <summary>
         /// 收到数据
         /// </summary>

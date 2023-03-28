@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog.LayoutRenderers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace ToolsAssistant.Services
         private WatsonWsClient _client = null;
 
         private EncordingType _encordingType = EncordingType.Utf8;
+
+        public bool IsConnected => _client != null && _client.Connected;
 
         public event EventHandlers.DataRecievedEventHandler DataRecievedEvent;
         public event EventHandlers.ConnectEventHandler ConnectEvent;
@@ -54,13 +57,13 @@ namespace ToolsAssistant.Services
                         data = Encoding.ASCII.GetString(e.Data);
                         break;
                     case EncordingType.Hex:
-                        for(int i=0;i<e.Data.Length;i++)
+                        for(int i=0;i<e.Data.Count;i++)
                         {
                             data += Convert.ToString(e.Data[i],16)+" ";
                         }
                         break;
                 }
-                DataRecievedEvent?.Invoke(e.IpPort,data);
+                DataRecievedEvent?.Invoke(null,data);
             }
             catch(Exception ex)
             {
@@ -75,7 +78,7 @@ namespace ToolsAssistant.Services
 
         public void Disconnect()
         {
-            if(_client.Connected)
+            if(_client != null && _client.Connected)
             {
                 _client.Stop();
                 ConnectEvent?.Invoke(null, false);

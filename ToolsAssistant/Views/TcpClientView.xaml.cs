@@ -19,7 +19,7 @@ namespace ToolsAssistant.Views
     /// <summary>
     /// TCPClientView.xaml 的交互逻辑
     /// </summary>
-    public partial class TcpClientView : PageWithId
+    public partial class TcpClientView : Page
     {
         public TcpClientView()
         {

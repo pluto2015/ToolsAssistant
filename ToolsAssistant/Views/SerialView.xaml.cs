@@ -19,7 +19,7 @@ namespace ToolsAssistant.Views
     /// <summary>
     /// SerialView.xaml 的交互逻辑
     /// </summary>
-    public partial class SerialView : PageWithId
+    public partial class SerialView : Page
     {
         public SerialView()
         {

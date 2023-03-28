@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,19 +10,25 @@ namespace ToolsAssistant.Services
 {
     public interface IWebSocketServer
     {
+        #region 事件
         /// <summary>
         /// 收到数据
         /// </summary>
-        event DataRecievedEventHandler DataRecievedEvent;
+        event DataRecievedEventHandler DataRecieved;
         /// <summary>
         /// 连接及断开事件
         /// </summary>
-        event ConnectEventHandler ConnectEvent;
+        event ConnectEventHandler ClientConnected;
+        /// <summary>
+        /// 服务停止
+        /// </summary>
+        event EventHandler ServerStoped;
+        #endregion
         /// <summary>
         /// 开启server
         /// </summary>
-        /// <param name="port">端口号</param>
-        void Start(int port);
+        /// <param name="url">ip:port</param>
+        void Start(string url);
         /// <summary>
         /// 停止server
         /// </summary>
@@ -31,5 +38,11 @@ namespace ToolsAssistant.Services
         /// </summary>
         /// <param name="encordingType">编码类型</param>
         void SetEncording(EncordingType encordingType);
+        /// <summary>
+        /// 发送数据
+        /// </summary>
+        /// <param name="ipPort">ip:port</param>
+        /// <param name="data">字符串数据</param>
+        void SendData(string ipPort,string data);
     }
 }

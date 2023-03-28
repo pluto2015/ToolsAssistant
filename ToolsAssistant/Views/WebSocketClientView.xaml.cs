@@ -19,21 +19,12 @@ namespace ToolsAssistant.Views
     /// <summary>
     /// WebServerClientView.xaml 的交互逻辑
     /// </summary>
-    public partial class WebSocketClientView : PageWithId
+    public partial class WebSocketClientView : Page
     {
         public WebSocketClientView()
         {
             InitializeComponent();
             DataContext = new WebSocketClientViewModel();
-        }
-
-        private void Page_Unloaded(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

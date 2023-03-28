@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +8,26 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using ToolsAssistant.Views;
-using ToolsAssistant.Factories;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
+using Pluto.Wpf.Controls.Tab;
 
 namespace ToolsAssistant.ViewModels
 {
     public class MainWindowViewModel:ObservableObject
     {
         #region props
-        private Page _SubPage;
-        public Page SubPage { set=>SetProperty(ref _SubPage,value); get=>_SubPage; }
+        /// <summary>
+        /// Tab列表
+        /// </summary>
+        public ObservableCollection<Tab> Tabs { get; } = new ObservableCollection<Tab>();
+
+        private Tab _SelectedTab;
+        /// <summary>
+        /// 当前选中的tab
+        /// </summary>
+        public Tab SelectedTab { set => SetProperty(ref _SelectedTab, value); get => _SelectedTab; }
         #endregion
         #region commands
         public RelayCommand WebSocketServerCommand { set; get; }
@@ -61,8 +70,19 @@ namespace ToolsAssistant.ViewModels
         {
             try
             {
-                var dlg = PageFactory<SerialView>.GetPage(nameof(SerialView));
-                SubPage = dlg;
+                var str = "串口";
+                var ids = Tabs.Where(x => x.Header.StartsWith(str))?.Select(x => int.Parse(x.Header.Replace(str, "")));
+                var id = ids.Count() == 0 ? 1 : ids.Max() + 1;
+                var tab = new Tab
+                {
+                    ContentPage = new SerialView(),
+                    Header = "串口" + GetId("串口"),
+                    TabWidth = 100
+                };
+                Tabs.Add(tab);
+
+                //切换到页面
+                SelectedTab = tab;
             }
             catch(Exception ex)
             {
@@ -75,8 +95,16 @@ namespace ToolsAssistant.ViewModels
         {
             try
             {
-                var dlg = PageFactory<TcpServerView>.GetPage(nameof(TcpServerView));
-                SubPage = dlg;
+                var tab = new Tab
+                {
+                    Header = "TCP服务器" + GetId("TCP服务器"),
+                    ContentPage = new TcpServerView(),
+                    TabWidth = 150
+                };
+                Tabs.Add(tab);
+
+                //切换页面
+                SelectedTab = tab;
             }
             catch (Exception ex)
             {
@@ -89,8 +117,16 @@ namespace ToolsAssistant.ViewModels
         {
             try
             {
-                var dlg = PageFactory<TcpClientView>.GetPage(nameof(TcpClientView));
-                SubPage = dlg;
+                var tab = new Tab
+                {
+                    Header = "TCP客户端" + GetId("TCP客户端"),
+                    ContentPage = new TcpClientView(),
+                    TabWidth = 150
+                };
+                Tabs.Add(tab);
+
+                //切换页面
+                SelectedTab = tab;
             }
             catch (Exception ex)
             {
@@ -103,8 +139,16 @@ namespace ToolsAssistant.ViewModels
         {
             try
             {
-                var dlg = PageFactory<WebSocketClientView>.GetPage(nameof(WebSocketClientView));
-                SubPage = dlg;
+                var tab = new Tab
+                {
+                    Header = "WebSocket客户端" +GetId("WebSocket客户端"),
+                    ContentPage = new WebSocketClientView(),
+                    TabWidth = 160
+                };
+                Tabs.Add(tab);
+
+                //切换页面
+                SelectedTab = tab;
             }
             catch (Exception ex)
             {
@@ -117,14 +161,34 @@ namespace ToolsAssistant.ViewModels
         {
             try
             {
-                var dlg = PageFactory<WebSocketServerView>.GetPage(nameof(WebSocketServerView));
-                SubPage = dlg;
+                var tab = new Tab
+                {
+                    Header = "WebSocket服务端" + GetId("WebSocket服务端"),
+                    ContentPage = new WebSocketServerView(),
+                    TabWidth = 160
+                };
+                Tabs.Add(tab);
+
+                //切换页面
+                SelectedTab = tab;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
                 MessageBox.Show(ex.Message);
             }
+        }
+        /// <summary>
+        /// 通过名称获取id
+        /// </summary>
+        /// <param name="name">名称</param>
+        /// <returns></returns>
+        int GetId(string name)
+        {
+            var ids = Tabs.Where(x => x.Header.StartsWith(name))?.Select(x => int.Parse(x.Header.Replace(name, "")));
+            var id = ids.Count() == 0 ? 1 : ids.Max() + 1;
+
+            return id;
         }
 
         #endregion

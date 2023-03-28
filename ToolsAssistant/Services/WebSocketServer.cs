@@ -15,25 +15,24 @@ namespace ToolsAssistant.Services
 
         private EncordingType _encordingType = EncordingType.Utf8;
 
-        public event EventHandlers.DataRecievedEventHandler DataRecievedEvent;
-        public event EventHandlers.ConnectEventHandler ConnectEvent;
+        public event EventHandlers.DataRecievedEventHandler DataRecieved;
+        public event EventHandlers.ConnectEventHandler ClientConnected;
+        public event EventHandler ServerStoped;
 
-        public void Start(int port)
+        public void Start(string url)
         {
             if(_server != null&&_server.IsListening)
             {
                 _server.Stop();
             }
-            _server = new WatsonWsServer("+", port);
+            _server = new WatsonWsServer(new Uri($"http://{url}"));
 
             _server.ServerStopped += ServerStopped;
-            _server.ClientConnected += ClientConnected;
+            _server.ClientConnected += OnClientConnected;
             _server.ClientDisconnected += ClientDisconnected;
             _server.MessageReceived += MessageReceived;
 
             _server.Start();
-
-
         }
 
         private void MessageReceived(object sender, MessageReceivedEventArgs e)
@@ -50,13 +49,13 @@ namespace ToolsAssistant.Services
                         data = Encoding.ASCII.GetString(e.Data);
                         break;
                     case EncordingType.Hex:
-                        for (int i = 0; i < e.Data.Length; i++)
+                        for (int i = 0; i < e.Data.Count; i++)
                         {
                             data += Convert.ToString(e.Data[i], 16) + " ";
                         }
                         break;
                 }
-                DataRecievedEvent?.Invoke(e.IpPort, data);
+                DataRecieved?.Invoke(e.Client.IpPort, data);
             }
             catch (Exception ex)
             {
@@ -64,19 +63,19 @@ namespace ToolsAssistant.Services
             }
         }
 
-        private void ClientDisconnected(object sender, ClientDisconnectedEventArgs e)
+        private void ClientDisconnected(object sender, DisconnectionEventArgs e)
         {
-            ConnectEvent?.Invoke(e.IpPort,false);
+            ClientConnected?.Invoke(e.Client.IpPort,false);
         }
 
-        private void ClientConnected(object sender, ClientConnectedEventArgs e)
+        private void OnClientConnected(object sender, ConnectionEventArgs e)
         {
-            ConnectEvent?.Invoke(e.IpPort, true);
+            ClientConnected?.Invoke(e.Client.IpPort, true);
         }
 
         private void ServerStopped(object sender, EventArgs e)
         {
-
+            ServerStoped?.Invoke(this, e);
         }
 
         public void Stop()
@@ -87,6 +86,36 @@ namespace ToolsAssistant.Services
         public void SetEncording(EncordingType encordingType)
         {
             _encordingType = encordingType;
+        }
+
+        public void SendData(string ipPort, string data)
+        {
+            byte[] dataBytes;
+            switch (_encordingType)
+            {
+                case EncordingType.ASCII:
+                    dataBytes = Encoding.ASCII.GetBytes(data.Replace(" ", ""));
+                    break;
+                case EncordingType.Hex:
+                    var lst = data.Split(" ");
+                    dataBytes = new byte[lst.Length];
+                    for (int i = 0; i < lst.Length; i++)
+                    {
+                        dataBytes[i] = Convert.ToByte(lst[i], 16);
+                    }
+                    break;
+                default: //EncordingType.Utf8
+                    dataBytes = Encoding.UTF8.GetBytes(data);
+                    break;
+            }
+
+            var client = _server.ListClients().FirstOrDefault(x => x.IpPort == ipPort);
+            if (client == null)
+            {
+                throw new Exception($"客户端({ipPort})不存在");
+            }
+
+            _server.SendAsync(client.Guid, dataBytes);
         }
     }
 }

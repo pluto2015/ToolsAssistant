@@ -1,18 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using ToolsAssistant.Services;
 
 namespace ToolsAssistant.ViewModels
 {
-    public class WebSocketClientViewModel: ObservableObject
+    public class WebSocketClientViewModel: ObservableObject,IDisposable
     {
         #region props
         private string _ConnectString = "连接";
@@ -78,7 +74,13 @@ namespace ToolsAssistant.ViewModels
             ConnectCommand = new RelayCommand(OnConnectCommand);
 
             _client.ConnectEvent += ConnectEvent;
+            _client.DataRecievedEvent += _client_DataRecievedEvent;
 
+        }
+
+        private void _client_DataRecievedEvent(string ipPort, string data)
+        {
+            RecieveStr = $"{RecieveStr}{DateTime.Now} ipPort => {data}\n";
         }
 
         private void InitEncoder()
@@ -165,6 +167,19 @@ namespace ToolsAssistant.ViewModels
                 }
 
                 _client.SendData(SendStr);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                _client?.Disconnect();
             }
             catch (Exception ex)
             {
