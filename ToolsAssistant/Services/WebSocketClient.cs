@@ -20,7 +20,7 @@ namespace ToolsAssistant.Services
         public event EventHandlers.DataRecievedEventHandler DataRecievedEvent;
         public event EventHandlers.ConnectEventHandler ConnectEvent;
 
-        public void Connect(string ipPort)
+        public Task<bool> ConnectWithTimeoutAsync(string ipPort, int timeOut)
         {
             if(_client == null||!_client.Connected)
             {
@@ -35,7 +35,7 @@ namespace ToolsAssistant.Services
             _client.MessageReceived += MessageReceived;
             _client.ServerDisconnected += ServerDisconnected;
 
-            _client.Start();
+            return _client.StartWithTimeoutAsync(timeOut);
         }
 
         private void ServerDisconnected(object sender, EventArgs e)

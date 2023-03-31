@@ -49,6 +49,12 @@ namespace ToolsAssistant.ViewModels
 
         private string _Url = "127.0.0.1:8888";
         public string Url { set => SetProperty(ref _Url, value); get => _Url; }
+
+        private Visibility _BusyVisible = Visibility.Collapsed;
+        /// <summary>
+        /// 显示忙碌状态
+        /// </summary>
+        public Visibility BusyVisible { set => SetProperty(ref _BusyVisible, value); get => _BusyVisible; }
         #endregion
         #region commands
         public RelayCommand SendCommand { set; get; }
@@ -118,7 +124,16 @@ namespace ToolsAssistant.ViewModels
             {
                 if(ConnectString == "连接")
                 {
-                    _client.Connect(Url);
+                    BusyVisible = Visibility.Visible;
+                    _client.ConnectWithTimeoutAsync(Url, 5).ContinueWith((task) =>
+                    {
+                        if(!task.Result)
+                        {
+                            MessageBox.Show("连接超时");
+                        }
+
+                        BusyVisible = Visibility.Collapsed;
+                    });
                 }
                 else
                 {

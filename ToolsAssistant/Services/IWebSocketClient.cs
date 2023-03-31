@@ -7,6 +7,9 @@ using static ToolsAssistant.EventHandlers;
 
 namespace ToolsAssistant.Services
 {
+    /// <summary>
+    /// websocket客户端
+    /// </summary>
     public interface IWebSocketClient
     {
         bool IsConnected { get; }
@@ -22,7 +25,8 @@ namespace ToolsAssistant.Services
         /// 连接
         /// </summary>
         /// <param name="ipPort">ip：port</param>
-        void Connect(string ipPort);
+        /// <param name="timeOut">超时时间(s)</param>
+        Task<bool> ConnectWithTimeoutAsync(string ipPort,int timeOut=5);
         /// <summary>
         /// 断开连接
         /// </summary>

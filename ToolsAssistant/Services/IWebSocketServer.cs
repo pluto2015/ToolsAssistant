@@ -8,6 +8,9 @@ using static ToolsAssistant.EventHandlers;
 
 namespace ToolsAssistant.Services
 {
+    /// <summary>
+    /// websocket服务端
+    /// </summary>
     public interface IWebSocketServer
     {
         #region 事件

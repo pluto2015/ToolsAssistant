@@ -3,7 +3,10 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:ToolsAssistant.Views" xmlns:viewmodels="clr-namespace:ToolsAssistant.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:WebSocketClientViewModel}"
+      xmlns:local="clr-namespace:ToolsAssistant.Views" 
+      xmlns:viewmodels="clr-namespace:ToolsAssistant.ViewModels" 
+      xmlns:gif="clr-namespace:XamlAnimatedGif;assembly=XamlAnimatedGif"
+      d:DataContext="{d:DesignInstance Type=viewmodels:WebSocketClientViewModel}"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="WebServerClientView" Background="White">
@@ -32,7 +35,7 @@
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
             <RowDefinition Height="5"/>
             <RowDefinition/>
@@ -40,9 +43,14 @@
         <Border BorderThickness="1" BorderBrush="Gray" Margin="3" CornerRadius="5" Grid.Row="0">
             <StackPanel  Orientation="Horizontal">
                 <Label Content="ws://" Margin="3" VerticalContentAlignment="Center"></Label>
-                <TextBox Text="{Binding Url}" Margin="3" Width="200" VerticalContentAlignment="Center"/>
-                <Button x:Name="btn_connect" Margin="3" Content="{Binding ConnectString}" Width="60" Command="{Binding ConnectCommand}">
+                <TextBox Text="{Binding Url}" Margin="3" Width="100" VerticalContentAlignment="Center"/>
+                <Button x:Name="btn_connect" Margin="3"  Width="auto" MinWidth="100" Command="{Binding ConnectCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Margin="3" Width="40" gif:AnimationBehavior.SourceUri="/ToolsAssistant;component/Icons/busy.gif" Visibility="{Binding BusyVisible}"/>
+                        <Label Content="{Binding ConnectString}" VerticalContentAlignment="Center"/>
+                    </StackPanel>
                 </Button>
+                
             </StackPanel>
         </Border>
         <Border BorderThickness="1" BorderBrush="Gray" Margin="3" CornerRadius="5" Grid.Row="1">

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\busy.gif" />
     <None Remove="NLog.Config" />
   </ItemGroup>
 
@@ -29,6 +30,11 @@
     <PackageReference Include="NLog.Extensions.Logging" Version="5.2.2" />
     <PackageReference Include="Pluto.Wpf.Controls" Version="1.0.5" />
     <PackageReference Include="WatsonWebsocket" Version="4.0.8" />
+    <PackageReference Include="XamlAnimatedGif" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\busy.gif" />
   </ItemGroup>
 
 </Project>
