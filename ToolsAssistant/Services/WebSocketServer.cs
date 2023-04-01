@@ -49,10 +49,7 @@ namespace ToolsAssistant.Services
                         data = Encoding.ASCII.GetString(e.Data);
                         break;
                     case EncordingType.Hex:
-                        for (int i = 0; i < e.Data.Count; i++)
-                        {
-                            data += Convert.ToString(e.Data[i], 16) + " ";
-                        }
+                        data = string.Join(" ", e.Data.Select(x => Convert.ToString(x, 16)));
                         break;
                 }
                 DataRecieved?.Invoke(e.Client.IpPort, data);
@@ -98,11 +95,7 @@ namespace ToolsAssistant.Services
                     break;
                 case EncordingType.Hex:
                     var lst = data.Split(" ");
-                    dataBytes = new byte[lst.Length];
-                    for (int i = 0; i < lst.Length; i++)
-                    {
-                        dataBytes[i] = Convert.ToByte(lst[i], 16);
-                    }
+                    dataBytes = lst.Select(x=>Convert.ToByte(x,16)).ToArray();
                     break;
                 default: //EncordingType.Utf8
                     dataBytes = Encoding.UTF8.GetBytes(data);

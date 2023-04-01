@@ -96,15 +96,11 @@ namespace ToolsAssistant.Services
             switch (_encordingType)
             {
                 case EncordingType.ASCII:
-                    dataBytes = Encoding.ASCII.GetBytes(data.Replace(" ",""));
+                    dataBytes = Encoding.ASCII.GetBytes(data);
                     break;
                 case EncordingType.Hex:
                     var lst = data.Split(" ");
-                    dataBytes = new byte[lst.Length];
-                    for (int i = 0; i < lst.Length; i++)
-                    {
-                        dataBytes[i] = Convert.ToByte(lst[i], 16);
-                    }
+                    dataBytes = lst.Select(x=>Convert.ToByte(x,16)).ToList().ToArray();
                     break;
                 default: //EncordingType.Utf8
                     dataBytes = Encoding.UTF8.GetBytes(data);

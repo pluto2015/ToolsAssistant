@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Windows;
 using ToolsAssistant.Services;
+using ToolsAssistant.Helpers;
 
 namespace ToolsAssistant.ViewModels
 {
@@ -15,7 +16,16 @@ namespace ToolsAssistant.ViewModels
         public string ConnectString { set => SetProperty(ref _ConnectString, value); get => _ConnectString; }
 
         private string _SendStr;
-        public string SendStr { set => SetProperty(ref _SendStr, value); get => _SendStr; }
+        public string SendStr { set
+            {
+                if(IsHex)
+                {
+                    var lst = value.Replace(" ","").Split(2);
+                    value = string.Join(" ", lst);
+                }
+                SetProperty(ref _SendStr, value);
+            }
+            get => _SendStr; }
 
         private string _RecieveStr;
         public string RecieveStr { set => SetProperty(ref _RecieveStr, value); get => _RecieveStr; }

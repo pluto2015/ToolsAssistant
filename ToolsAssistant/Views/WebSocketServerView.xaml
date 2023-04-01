@@ -76,7 +76,7 @@
                             <RadioButton Content="HEX" Margin="3" VerticalContentAlignment="Center" IsChecked="{Binding IsHex}" Style="{StaticResource radio_style}"/>
                         </StackPanel>
                         <ScrollViewer Grid.Row="1" Margin="3">
-                            <TextBox Text="{Binding SendStr}"></TextBox>
+                            <TextBox Text="{Binding SendStr, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         </ScrollViewer>
                     </Grid>
                 </Border>
