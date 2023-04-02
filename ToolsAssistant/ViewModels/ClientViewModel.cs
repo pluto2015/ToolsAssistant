@@ -6,10 +6,12 @@ using System;
 using System.Windows;
 using ToolsAssistant.Services;
 using ToolsAssistant.Helpers;
+using ToolsAssistant.Models;
+using System.Linq;
 
 namespace ToolsAssistant.ViewModels
 {
-    public class WebSocketClientViewModel: ObservableObject,IDisposable
+    public class ClientViewModel: ObservableObject,IDisposable
     {
         #region props
         private string _ConnectString = "连接";
@@ -73,12 +75,12 @@ namespace ToolsAssistant.ViewModels
         public RelayCommand ConnectCommand { set; get; }
         #endregion
         #region methods
-        protected readonly ILogger<WebSocketClientViewModel> _logger;
-        protected readonly IWebSocketClient _client;
-        public WebSocketClientViewModel()
+        protected readonly ILogger<ClientViewModel> _logger;
+        protected readonly IClientService _client;
+        public ClientViewModel(ClientServerType clientType)
         {
-            _logger = App.Current.Services.GetService<ILogger<WebSocketClientViewModel>>();
-            _client = App.Current.Services.GetService<IWebSocketClient>();
+            _logger = App.Current.Services.GetService<ILogger<ClientViewModel>>();
+            _client = App.Current.Services.GetServices<IClientService>().FirstOrDefault(x=>x.ClientType == clientType);
             Init();
         }
 
@@ -96,7 +98,7 @@ namespace ToolsAssistant.ViewModels
 
         private void _client_DataRecievedEvent(string ipPort, string data)
         {
-            RecieveStr = $"{RecieveStr}{DateTime.Now} ipPort => {data}\n";
+            RecieveStr = $"{RecieveStr}{DateTime.Now} => {data}\n";
         }
 
         private void InitEncoder()

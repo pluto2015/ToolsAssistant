@@ -40,8 +40,10 @@ namespace ToolsAssistant
 
             services.AddLogging(x => x.AddNLog());
 
-            services.AddScoped<IWebSocketClient, WebSocketClient>();
-            services.AddScoped<IWebSocketServer, WebSocketServer>();
+            services.AddScoped<IClientService, WebSocketClient>();
+            services.AddScoped<IClientService, TCPClientService>();
+            services.AddScoped<IServerService, WebSocketServer>();
+            services.AddScoped<IServerService, TCPServerService>();
 
             return services.BuildServiceProvider();
         }

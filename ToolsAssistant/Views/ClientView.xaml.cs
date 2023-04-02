@@ -12,19 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ToolsAssistant.Models;
 using ToolsAssistant.ViewModels;
 
 namespace ToolsAssistant.Views
 {
     /// <summary>
-    /// TcpServerView.xaml 的交互逻辑
+    /// WebServerClientView.xaml 的交互逻辑
     /// </summary>
-    public partial class TcpServerView : Page
+    public partial class ClientView : Page
     {
-        public TcpServerView()
+        public ClientView(ClientServerType clientType)
         {
             InitializeComponent();
-            DataContext = new TcpServerViewModel();
+            DataContext = new ClientViewModel(clientType);
         }
     }
 }

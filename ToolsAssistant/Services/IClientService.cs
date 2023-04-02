@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ToolsAssistant.Models;
 using static ToolsAssistant.EventHandlers;
 
 namespace ToolsAssistant.Services
 {
-    /// <summary>
-    /// websocket客户端
-    /// </summary>
-    public interface IWebSocketClient
+    public interface IClientService
     {
+        /// <summary>
+        /// 类型
+        /// </summary>
+        ClientServerType ClientType { get; }
+        /// <summary>
+        /// 连接状态
+        /// </summary>
         bool IsConnected { get; }
         /// <summary>
         /// 收到数据
@@ -26,7 +31,7 @@ namespace ToolsAssistant.Services
         /// </summary>
         /// <param name="ipPort">ip：port</param>
         /// <param name="timeOut">超时时间(s)</param>
-        Task<bool> ConnectWithTimeoutAsync(string ipPort,int timeOut=5);
+        Task<bool> ConnectWithTimeoutAsync(string ipPort, int timeOut = 5);
         /// <summary>
         /// 断开连接
         /// </summary>

@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using Pluto.Wpf.Controls.Tab;
+using ToolsAssistant.Models;
 
 namespace ToolsAssistant.ViewModels
 {
@@ -98,7 +99,7 @@ namespace ToolsAssistant.ViewModels
                 var tab = new Tab
                 {
                     Header = "TCP服务器" + GetId("TCP服务器"),
-                    ContentPage = new TcpServerView(),
+                    ContentPage = new ServerView(ClientServerType.TCP),
                     TabWidth = 150
                 };
                 Tabs.Add(tab);
@@ -120,7 +121,7 @@ namespace ToolsAssistant.ViewModels
                 var tab = new Tab
                 {
                     Header = "TCP客户端" + GetId("TCP客户端"),
-                    ContentPage = new TcpClientView(),
+                    ContentPage = new ClientView(ClientServerType.TCP),
                     TabWidth = 150
                 };
                 Tabs.Add(tab);
@@ -142,7 +143,7 @@ namespace ToolsAssistant.ViewModels
                 var tab = new Tab
                 {
                     Header = "WebSocket客户端" +GetId("WebSocket客户端"),
-                    ContentPage = new WebSocketClientView(),
+                    ContentPage = new ClientView(ClientServerType.Websocket),
                     TabWidth = 160
                 };
                 Tabs.Add(tab);
@@ -164,7 +165,7 @@ namespace ToolsAssistant.ViewModels
                 var tab = new Tab
                 {
                     Header = "WebSocket服务端" + GetId("WebSocket服务端"),
-                    ContentPage = new WebSocketServerView(),
+                    ContentPage = new ServerView(ClientServerType.Websocket),
                     TabWidth = 160
                 };
                 Tabs.Add(tab);

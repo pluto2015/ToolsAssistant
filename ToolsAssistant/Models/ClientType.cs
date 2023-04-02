@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ToolsAssistant.Services
+namespace ToolsAssistant.Models
 {
     /// <summary>
-    /// tcp服务端
+    /// 客户端以及服务端类型
     /// </summary>
-    public interface ITCPServerService
+    public enum ClientServerType
     {
+        TCP,
+        UDP,
+        Websocket
     }
 }

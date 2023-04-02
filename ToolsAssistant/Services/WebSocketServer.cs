@@ -5,15 +5,18 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ToolsAssistant.Models;
 using WatsonWebsocket;
 
 namespace ToolsAssistant.Services
 {
-    internal class WebSocketServer:IWebSocketServer
+    internal class WebSocketServer:IServerService
     {
         private WatsonWsServer _server =null;
 
         private EncordingType _encordingType = EncordingType.Utf8;
+
+        public ClientServerType ServerType => ClientServerType.Websocket;
 
         public event EventHandlers.DataRecievedEventHandler DataRecieved;
         public event EventHandlers.ConnectEventHandler ClientConnected;
@@ -21,7 +24,7 @@ namespace ToolsAssistant.Services
 
         public void Start(string url)
         {
-            if(_server != null&&_server.IsListening)
+            if (_server != null && _server.IsListening)
             {
                 _server.Stop();
             }
@@ -77,7 +80,10 @@ namespace ToolsAssistant.Services
 
         public void Stop()
         {
-            _server.Stop();
+            if(_server != null && _server.IsListening)
+            {
+                _server.Stop();
+            }
         }
 
         public void SetEncording(EncordingType encordingType)

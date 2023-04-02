@@ -1,18 +1,19 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ToolsAssistant.Models;
 using static ToolsAssistant.EventHandlers;
 
 namespace ToolsAssistant.Services
 {
-    /// <summary>
-    /// websocket服务端
-    /// </summary>
-    public interface IWebSocketServer
+    public interface IServerService
     {
+        /// <summary>
+        /// 类型
+        /// </summary>
+        ClientServerType ServerType { get; }
         #region 事件
         /// <summary>
         /// 收到数据
@@ -46,6 +47,6 @@ namespace ToolsAssistant.Services
         /// </summary>
         /// <param name="ipPort">ip:port</param>
         /// <param name="data">字符串数据</param>
-        void SendData(string ipPort,string data);
+        void SendData(string ipPort, string data);
     }
 }

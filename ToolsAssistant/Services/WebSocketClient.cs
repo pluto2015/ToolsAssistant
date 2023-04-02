@@ -5,17 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ToolsAssistant.Models;
 using WatsonWebsocket;
 
 namespace ToolsAssistant.Services
 {
-    internal class WebSocketClient : IWebSocketClient
+    internal class WebSocketClient : IClientService
     {
         private WatsonWsClient _client = null;
 
         private EncordingType _encordingType = EncordingType.Utf8;
 
         public bool IsConnected => _client != null && _client.Connected;
+
+        public ClientServerType ClientType => ClientServerType.Websocket;
 
         public event EventHandlers.DataRecievedEventHandler DataRecievedEvent;
         public event EventHandlers.ConnectEventHandler ConnectEvent;
